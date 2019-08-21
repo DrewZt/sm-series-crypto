@@ -10,6 +10,12 @@ function pub2address(str) {
     return addr;
 }
 
+function getsm3(str) {
+    var b = sm3().sum(str);
+    var c = utils.bytesTohex(b)
+    return c;
+}
+
 function createkey(){
     var key = sm2.genKeyPair();
     var keypair={};
@@ -68,6 +74,7 @@ function sm2VerifyHex(msg,pub,result){
 
 module.exports = {
     pub2address,
+    getsm3,
     createkey,
     getAddress,
     sm2SignRaw,

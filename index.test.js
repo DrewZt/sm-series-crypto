@@ -10,6 +10,8 @@ msg='abcdef'
 pri=c.privateKey
 pub=c.publicKey
 
+key2=SM2.getsm3(b)
+console.log(key2)
 
 key3=SM2.sm2SignRaw(msg,pri)
 // console.log(key3)
