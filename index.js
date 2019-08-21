@@ -5,8 +5,10 @@ utils = require('./lib/utils')
 
 //计算sm3
 function getsm3(str) {
-    var a = utils.hexToBytes(str);
-    var b = sm3().sum(a);
+    if (typeof str == "string"){
+        str = utils.hexToBytes(str);
+    }
+    var b = sm3().sum(str);
     var c = utils.bytesTohex(b)
     return c;
 }
@@ -79,7 +81,27 @@ function sm2VerifyHex(msg,pub,result){
     return result2;
 }
 
+function sm2SignHash(msg,pri){
+    publicKey=null;
+    privateKey=pri;
+    key1=sm2.SM2KeyPair(publicKey,privateKey);
+    // msg2=utils.hexToBytes(msg);
+    result1=key1.signDigest(msg);
+    return result1;
+}
+
+function sm2VerifyHash(msg,pub,result){
+    publicKey='04' + pub.slice(-128);
+    privateKey=null;
+    // msg2=utils.hexToBytes(msg);
+    key2=sm2.SM2KeyPair(publicKey,privateKey);
+    result2=key2.verifyDigest(msg,result.r,result.s);
+    return result2;
+}
+
+
 module.exports = {
+    utils,
     pub2address,
     getsm3,
     createkey,
@@ -88,5 +110,7 @@ module.exports = {
     sm2VerifyRaw,
     sm2SignHex,
     sm2VerifyHex,
+    sm2SignHash,
+    sm2VerifyHash,
 };
 
