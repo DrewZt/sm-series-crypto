@@ -3,6 +3,15 @@ sm3 = require('./lib/sm3');
 // sm4 = require('./lib/sm4')
 utils = require('./lib/utils')
 
+//计算sm3
+function getsm3(str) {
+    var a = utils.hexToBytes(str);
+    var b = sm3().sum(a);
+    var c = utils.bytesTohex(b)
+    return c;
+}
+
+//用公钥算地址
 function pub2address(str) {
     var a = utils.hexToBytes(str);
     var b = sm3().sum(a);
@@ -10,12 +19,7 @@ function pub2address(str) {
     return addr;
 }
 
-function getsm3(str) {
-    var b = sm3().sum(str);
-    var c = utils.bytesTohex(b)
-    return c;
-}
-
+//生成秘钥对和地址
 function createkey(){
     var key = sm2.genKeyPair();
     var keypair={};
@@ -26,7 +30,7 @@ function createkey(){
     return keypair
 }
 
-
+//用私钥计算公钥和地址
 function getAddress(str){
     var keypair2={};
     pvkey=str.replace(/^0x/i,'');
@@ -37,7 +41,7 @@ function getAddress(str){
     return keypair2
 }
 
-
+//对字符串直接签名
 function sm2SignRaw(msg,pri){
     publicKey=null;
     privateKey=pri;
@@ -46,6 +50,7 @@ function sm2SignRaw(msg,pri){
     return result1;
 }
 
+//验证直接签名结果
 function sm2VerifyRaw(msg,pub,result){
     publicKey='04' + pub.slice(-128);
     privateKey=null;
@@ -54,6 +59,7 @@ function sm2VerifyRaw(msg,pub,result){
     return result2;
 }
 
+//将字符串转换为bytes后签名
 function sm2SignHex(msg,pri){
     publicKey=null;
     privateKey=pri;
@@ -63,6 +69,7 @@ function sm2SignHex(msg,pri){
     return result1;
 }
 
+//验证字符串转换为bytes后的签名
 function sm2VerifyHex(msg,pub,result){
     publicKey='04' + pub.slice(-128);
     privateKey=null;
